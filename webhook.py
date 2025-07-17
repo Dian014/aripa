@@ -1,13 +1,14 @@
 from fastapi import FastAPI, Request
-import uvicorn
+from fastapi.responses import JSONResponse
 
 app = FastAPI()
 
 @app.post("/webhook")
 async def handle_webhook(request: Request):
-    data = await request.json()
-    print("📩 Webhook diterima:", data)
-    return {"status": "ok"}
+    try:
+        data = await request.json()
+    except Exception:
+        data = {}  # fallback ke data kosong
 
-if __name__ == "__main__":
-    uvicorn.run("webhook:app", host="0.0.0.0", port=8000)
+    print("📥 Payload diterima:", data)
+    return {"message": "Webhook diterima", "data": data}
