@@ -1,5 +1,4 @@
-.github/workflows/deploy.yml
-name: 🚀 Deploy Webhook
+name: 🚀 Auto Deploy Webhook
 
 on:
   push:
@@ -11,16 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 📥 Checkout repo
-      uses: actions/checkout@v3
+      - name: 📥 Checkout repo
+        uses: actions/checkout@v3
 
-    - name: 🔐 Setup SSH key
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.CI_PRIVATE_KEY }}" > ~/.ssh/id_ci
-        chmod 600 ~/.ssh/id_ci
-        ssh-keyscan -H server1.skyspewi29.com >> ~/.ssh/known_hosts
-
-    - name: 🚀 Jalankan deploy.sh di server
-      run: |
-        ssh -i ~/.ssh/id_ci deploy@server1.skyspewi29.com 'bash /home/deploy/deploy.sh'
+      - name: 🔐 Setup SSH key dan jalankan script
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.CI_PRIVATE_KEY }}" > ~/.ssh/id_ci
+          chmod 600 ~/.ssh/id_ci
+          ssh-keyscan -H server1.skyspewi29.com >> ~/.ssh/known_hosts
+          ssh -i ~/.ssh/id_ci deploy@server1.skyspewi29.com 'bash /home/deploy/deploy.sh'
